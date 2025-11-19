@@ -4,21 +4,46 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
+    <!-- Start Single Page Apps for GitHub Pages -->
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      // This script checks to see if a redirect is present in the query string,
+      // converts it back into the correct url and adds it to the
+      // browser's history using window.history.replaceState(...),
+      // which won't cause the browser to attempt to load the new url.
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <!-- End Single Page Apps for GitHub Pages -->
+    
     <!-- Primary Meta Tags -->
     <title>Secret Santa Planner</title>
     <meta name="title" content="Secret Santa Planner" />
-    <meta name="description" content="Organize your Secret Santa gift exchange easily and securely." />
+    <meta name="description" content="Organize your Secret Santa gift exchange easily and securely. No accounts needed, no emails - just have fun!" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://gazdik.github.io/secretsanta/" />
-    <meta property="og:title" content="Secret Santa Planner" />
-    <meta property="og:description" content="Organize your Secret Santa gift exchange easily and securely." />
+    <meta property="og:url" content="https://mael.dev/secretsanta/" />
+    <meta property="og:title" content="Secret Santa Planner - by mael.dev" />
+    <meta property="og:description" content="Organize your Secret Santa gift exchange easily and securely. No accounts needed, no emails - just have fun!" />
     <meta property="og:image" content="./static/cats.png" />
 
     <!-- Favicon -->
     <link rel="icon" href="./static/mistletoe.png" />
     
+    <!-- Social Links -->
+    <link rel="me" href="https://github.com/arcanis" />
+    <link rel="me" href="https://bsky.app/profile/mael.dev" />
+
     <!-- Theme Color -->
     <meta name="theme-color" content="#DC2626" />
   </head>
