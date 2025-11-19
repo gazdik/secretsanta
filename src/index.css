@@ -11,10 +11,32 @@ body {
   font-size: 14px;
 }
 
-.snow-bg {
-  background-image: url('/static/snow.png');
-  background-repeat: repeat;
-  background-size: 200px 200px;
+.snow-overlay {
+  z-index: 5;
+}
+
+.snow-overlay > div {
+  opacity: var(--snow-opacity, 0.8);
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(var(--snow-drift-start, 0px), -10%, 0);
+    opacity: var(--snow-opacity, 0.8);
+  }
+  100% {
+    transform: translate3d(var(--snow-drift-end, 0px), 110vh, 0);
+    opacity: var(--snow-opacity, 0.25);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: var(--snow-opacity, 0.8);
+  }
+  50% {
+    opacity: var(--snow-opacity-min, 0.2);
+  }
 }
 
 /* 90s Navigation Bar */

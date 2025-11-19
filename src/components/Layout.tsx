@@ -1,7 +1,7 @@
-import { t } from "i18next";
 import { MenuItem, SideMenu } from "./SideMenu";
 import { NavBar90s } from "./NavBar90s";
 import { Footer90s } from "./Footer90s";
+import { Snow } from "./Snow";
 
 export type LayoutProps = {
   menuItems: React.ReactNode[];
@@ -10,7 +10,8 @@ export type LayoutProps = {
 
 export function Layout({ menuItems, children }: LayoutProps) {
   return (
-    <div className="snow-bg flex flex-col min-h-screen">
+    <div className="relative overflow-hidden flex flex-col min-h-screen">
+      <Snow />
       <NavBar90s />
       <div className="flex-1 p-4 md:p-6">
         <div className="container mx-auto max-w-6xl">
