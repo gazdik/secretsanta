@@ -33,6 +33,17 @@ export function ParticipantsList({
     }));
   };
 
+  const updateParticipantEmail = (id: string, email: string) => {
+    if (id === nextParticipantId) {
+      setNextParticipantId(crypto.randomUUID());
+    }
+
+    onChangeParticipants(produce(participants, draft => {
+      draft[id] ??= {id, name: '', rules: []};
+      draft[id].email = email || undefined;
+    }));
+  };
+
   const removeParticipant = (id: string) => {
     onChangeParticipants(produce(participants, draft => {
       delete draft[id];
@@ -48,6 +59,7 @@ export function ParticipantsList({
   const participantsList = [...Object.values(participants), { 
     id: nextParticipantId, 
     name: '', 
+    email: '',
     rules: [] 
   }];
 
@@ -65,6 +77,7 @@ export function ParticipantsList({
             participantIndex={index}
             isLast={index === Object.keys(participants).length}
             onNameChange={(name) => updateParticipant(participant.id, name)}
+            onEmailChange={(email) => updateParticipantEmail(participant.id, email)}
             onOpenRules={() => onOpenRules(participant.id)}
             onRemove={() => removeParticipant(participant.id)}
           />

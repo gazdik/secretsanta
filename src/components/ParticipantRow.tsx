@@ -7,6 +7,7 @@ interface ParticipantRowProps {
   participantIndex: number;
   isLast: boolean;
   onNameChange: (name: string) => void;
+  onEmailChange: (email: string) => void;
   onOpenRules: () => void;
   onRemove: () => void;
 }
@@ -16,6 +17,7 @@ export function ParticipantRow({
   participantIndex,
   isLast,
   onNameChange,
+  onEmailChange,
   onOpenRules,
   onRemove,
 }: ParticipantRowProps) {
@@ -29,8 +31,17 @@ export function ParticipantRow({
         onChange={(e) => onNameChange(e.target.value)}
         className="input-90s flex-1 min-w-0"
         placeholder={t('participants.enterName')}
-        tabIndex={participantIndex + 1}
+        tabIndex={participantIndex * 2 + 1}
         autoFocus={isLast && document.activeElement?.tagName !== 'INPUT' && window.innerWidth >= 768}
+      />
+
+      <input
+        type="email"
+        value={participant.email ?? ''}
+        onChange={(e) => onEmailChange(e.target.value)}
+        className="input-90s flex-1 min-w-0"
+        placeholder={t('participants.enterEmail')}
+        tabIndex={participantIndex * 2 + 2}
       />
 
       {!isLast && (

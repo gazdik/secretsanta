@@ -19,24 +19,30 @@ export function SecretSantaLinks({ assignments, instructions, participants, onGe
   const currentHash = generateGenerationHash(participants);
   const hasChanged = currentHash !== assignments.hash;
 
-  const adjustedPairings = assignments.pairings.map(({giver, receiver}): [string, string, string | undefined] => [
-    participants[giver.id]?.name ?? giver.name,
-    participants[receiver.id]?.name ?? receiver.name,
-    participants[receiver.id]?.hint,
-  ]);
+  const adjustedPairings = assignments.pairings.map(({ giver, receiver }) => {
+    const giverParticipant = participants[giver.id];
+    const receiverParticipant = participants[receiver.id];
+
+    return {
+      giverName: giverParticipant?.name ?? giver.name,
+      giverEmail: giverParticipant?.email,
+      receiverName: receiverParticipant?.name ?? receiver.name,
+      receiverHint: receiverParticipant?.hint,
+    };
+  });
 
   adjustedPairings.sort((a, b) => {
-    return a[0].localeCompare(b[0]);
+    return a.giverName.localeCompare(b.giverName);
   });
 
   const handleExportCSV = async () => {
-    const linksData: [string, string][] = await Promise.all(
-      adjustedPairings.map(async ([giver, receiver, hint]) => {
-        const link = await generateAssignmentLink(giver, receiver, hint, instructions);
-        return [giver, link];
+    const linksData = await Promise.all(
+      adjustedPairings.map(async ({ giverName, giverEmail, receiverName, receiverHint }) => {
+        const link = await generateAssignmentLink(giverName, receiverName, receiverHint, instructions);
+        return [giverName, giverEmail, link] as [string, string | undefined, string];
       })
     );
-    
+
     const csvContent = generateCSV(linksData);
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
@@ -80,13 +86,13 @@ export function SecretSantaLinks({ assignments, instructions, participants, onGe
         </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-[minmax(100px,auto)_1fr] gap-3">
-        {adjustedPairings.map(([giver, receiver, hint]) => (
-          <React.Fragment key={giver}>
+        {adjustedPairings.map(({ giverName, receiverName, receiverHint }) => (
+          <React.Fragment key={giverName}>
             <span className="font-bold self-center">
-              {giver}:
+              {giverName}:
             </span>
             <CopyButton
-              textToCopy={() => generateAssignmentLink(giver, receiver, hint, instructions)}
+              textToCopy={() => generateAssignmentLink(giverName, receiverName, receiverHint, instructions)}
               className="button-90s flex items-center justify-center gap-2"
               style={{ background: '#0000FF', color: '#FFFF00', fontWeight: 'bold' }}
             >

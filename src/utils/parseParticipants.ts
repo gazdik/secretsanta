@@ -101,9 +101,10 @@ export function parseParticipantsText(input: string, existingParticipants?: Reco
       };
     }
 
-    const id = existingParticipants?.[name]?.id ?? crypto.randomUUID();
+    const existing = existingParticipants?.[name];
+    const id = existing?.id ?? crypto.randomUUID();
     nameToId[name] = id;
-    result[id] = { id, name, hint, rules: [] };
+    result[id] = { id, name, email: existing?.email, hint, rules: [] };
   }
 
   // Second pass: process rules
