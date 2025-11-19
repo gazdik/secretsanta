@@ -1,4 +1,5 @@
 import santaIcon from '../../static/santa-90s.svg';
+import treeIcon from '../../static/christmas-tree-90s.svg';
 
 interface PostCardProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ export function PostCard({ children, className = "" }: PostCardProps) {
               <div className="flex items-center gap-2">
                 <img src={santaIcon} alt="Santa" style={{ height: '24px', width: '24px' }} />
                 <span>SECRET SANTA GENERATOR</span>
+                <img src={treeIcon} alt="Tree" style={{ height: '24px', width: '24px' }} />
               </div>
             </td>
           </tr>
