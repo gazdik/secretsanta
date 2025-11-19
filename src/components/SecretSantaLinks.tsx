@@ -29,14 +29,21 @@ export function SecretSantaLinks({ assignments, instructions, participants, onGe
     return a[0].localeCompare(b[0]);
   });
 
-  const handleExportCSV = () => {
-    const csvContent = generateCSV(adjustedPairings.map(([giver, receiver]) => [giver, receiver]));
+  const handleExportCSV = async () => {
+    const linksData: [string, string][] = await Promise.all(
+      adjustedPairings.map(async ([giver, receiver, hint]) => {
+        const link = await generateAssignmentLink(giver, receiver, hint, instructions);
+        return [giver, link];
+      })
+    );
+    
+    const csvContent = generateCSV(linksData);
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'secret-santa-assignments.csv';
+    a.download = 'secret-santa-links.csv';
     a.click();
 
     window.URL.revokeObjectURL(url);

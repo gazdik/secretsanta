@@ -72,11 +72,7 @@ export function Pairing() {
     );
   }
 
-  const menuItems = [
-    <MenuItem key={`back`} to="/" icon={<ArrowLeft weight={`bold`}/>}>
-      {t('pairing.startYourOwn')}
-    </MenuItem>
-  ];
+  const menuItems: React.ReactNode[] = [];
 
   return (
     <Layout menuItems={menuItems}>

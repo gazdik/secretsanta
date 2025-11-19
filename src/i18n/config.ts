@@ -2,13 +2,11 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { en } from './en';
-import { fr } from './fr';
 
 export type Translations = typeof en;
 
 const resources = {
-  en: { translation: en },
-  fr: { translation: fr }
+  en: { translation: en }
 } satisfies Record<string, { translation: Translations }>;
 
 export const SUPPORTED_LANGUAGES = Object.keys(resources);

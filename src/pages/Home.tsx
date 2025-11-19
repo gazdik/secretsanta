@@ -103,16 +103,7 @@ export function Home() {
     setOpenSection('links');
   };
 
-  const menuItems = [
-    <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
-      <MenuItem key={`vanity`} to="https://bsky.app/profile/mael.dev" icon={<Star className={`text-orange-500`} weight={`fill`}/>}>
-        {t(`home.vanity`)}
-      </MenuItem>
-      <MenuItem key={`sponsor`} to="https://github.com/sponsors/arcanis?frequency=one-time&sponsor=arcanis" icon={<Heart className={`text-red-700`} weight={`fill`}/>}>
-        {t(`home.sponsor`)}
-      </MenuItem>
-    </div>,
-  ];
+  const menuItems: React.ReactNode[] = [];
 
   const toggleViewButton = (
     <button

@@ -24,7 +24,7 @@ export async function generateAssignmentLink(giver: string, receiver: string, re
 
 export function generateCSV(assignments: [string, string][]) {
   const csvContent = assignments
-    .map(([giver, receiver]) => `${giver}\t${receiver}`)
+    .map(([giver, link]) => `${giver},${link}`)
     .join('\n');
-  return `Giver\tReceiver\n${csvContent}`;
+  return `Giver,Link\n${csvContent}`;
 } 
