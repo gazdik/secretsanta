@@ -11,6 +11,12 @@ body {
   font-size: 14px;
 }
 
+.snow-bg {
+  background-image: url('/static/snow.png');
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
 /* 90s Navigation Bar */
 .nav-90s {
   background: #000080;
@@ -189,5 +195,22 @@ body {
 @media (max-width: 640px) {
   .table-90s {
     font-size: 12px;
+  }
+}
+
+/* Prefer dynamic viewport units so footers stay visible behind mobile address bars */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+@supports (min-height: 100svh) {
+  .min-h-screen {
+    min-height: 100svh;
+  }
+}
+
+@supports (min-height: 100dvh) {
+  .min-h-screen {
+    min-height: 100dvh;
   }
 }
