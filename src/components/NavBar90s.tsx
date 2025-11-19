@@ -19,7 +19,7 @@ export function NavBar90s() {
           <Link to="/" className="nav-section">
             🏠 Home
           </Link>
-          <a href="https://github.com/arcanis/secretsanta/" target="_blank" rel="noopener noreferrer" className="nav-section">
+          <a href="https://github.com/gazdik/secretsanta" target="_blank" rel="noopener noreferrer" className="nav-section">
             💾 GitHub
           </a>
           <span className="nav-section" style={{ background: '#FF0000', color: '#FFFF00' }}>

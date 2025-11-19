@@ -138,7 +138,7 @@ export function Home() {
                   i18nKey="home.explanation"
                   components={{
                     p: <p/>,
-                    githubLink: <a className="link-90s" href="https://github.com/arcanis/secretsanta/" target="_blank"/>,
+                    githubLink: <a className="link-90s" href="https://github.com/gazdik/secretsanta" target="_blank"/>,
                     exampleLink: <Link className="link-90s" to="/pairing?from=Simba&to=c1w%2FUV9lXC12U578BHPYZhXxhsK0fPTqoQDU9CA7W581P%2BM%3D"/>,
                   }}
                 />
