@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Classic 90s 2D Gift Box -->
+  <!-- Box -->
+  <rect x="20" y="35" width="60" height="50" fill="#FF0000" stroke="#000" stroke-width="2"/>
+  
+  <!-- Lid -->
+  <rect x="15" y="25" width="70" height="12" fill="#00AA00" stroke="#000" stroke-width="2"/>
+  
+  <!-- Vertical ribbon -->
+  <rect x="45" y="25" width="10" height="60" fill="#FFFF00" stroke="#000" stroke-width="2"/>
+  
+  <!-- Horizontal ribbon -->
+  <rect x="15" y="55" width="70" height="10" fill="#FFFF00" stroke="#000" stroke-width="2"/>
+  
+  <!-- Bow -->
+  <ellipse cx="35" cy="20" rx="12" ry="8" fill="#FFFF00" stroke="#000" stroke-width="2"/>
+  <ellipse cx="65" cy="20" rx="12" ry="8" fill="#FFFF00" stroke="#000" stroke-width="2"/>
+  <circle cx="50" cy="20" r="6" fill="#FFFF00" stroke="#000" stroke-width="2"/>
+  
+  <!-- Bow ribbons -->
+  <path d="M 35,28 L 30,35 L 35,32 Z" fill="#FFFF00" stroke="#000" stroke-width="1.5"/>
+  <path d="M 65,28 L 70,35 L 65,32 Z" fill="#FFFF00" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Shine effect -->
+  <rect x="25" y="40" width="8" height="15" fill="#FF6666" stroke="none" opacity="0.5"/>
+</svg>

@@ -1,5 +1,5 @@
-import christmasWreath from '../../static/christmas-wreath.svg';
-import giftBox from '../../static/gift-box.svg';
+import santaIcon from '../../static/santa-90s.svg';
+import treeIcon from '../../static/christmas-tree-90s.svg';
 
 interface PostCardProps {
   children: React.ReactNode;
@@ -8,18 +8,25 @@ interface PostCardProps {
 
 export function PostCard({ children, className = "" }: PostCardProps) {
   return (
-    <div className={`shadow-md relative z-10 transform rotate-2 transition-transform duration-300 p-3 bg-postcard rounded-lg ${className}`}>
-      <div className="relative p-8 bg-white">
-        <div className="absolute -top-6 -left-6 w-12 h-12 bg-[#5CC48A] rounded-full flex items-center justify-center transform -rotate-12">
-          <img className={`w-full h-full`} src={christmasWreath} />
-        </div>
-        
-        {children}
-        
-        <div className="absolute -bottom-6 -right-6 w-12 h-12 bg-[#EF3D3D] rounded-full flex items-center justify-center transform rotate-12">
-          <img className={`w-full h-full`} src={giftBox} />
-        </div>
-      </div>
+    <div className={`content-box-90s p-4 ${className}`}>
+      <table className="table-90s">
+        <tbody>
+          <tr>
+            <td style={{ background: '#FF00FF', fontWeight: 'bold', padding: '8px', borderBottom: '3px solid #000', fontFamily: 'Arial, Helvetica, sans-serif', color: '#FFFF00' }}>
+              <div className="flex items-center gap-2">
+                <img src={santaIcon} alt="Santa" style={{ height: '24px', width: '24px' }} />
+                <span>SECRET SANTA GENERATOR</span>
+                <img src={treeIcon} alt="Tree" style={{ height: '24px', width: '24px' }} />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style={{ padding: '16px' }}>
+              {children}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }

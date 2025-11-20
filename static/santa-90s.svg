@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Classic 90s 2D Santa Face -->
+  <!-- Hat -->
+  <path d="M 20,40 L 50,10 L 80,40 Z" fill="#FF0000" stroke="#000" stroke-width="2"/>
+  <ellipse cx="50" cy="10" rx="8" ry="8" fill="#FFFFFF" stroke="#000" stroke-width="1.5"/>
+  <rect x="15" y="38" width="70" height="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+  
+  <!-- Face -->
+  <circle cx="50" cy="60" r="25" fill="#FFCC99" stroke="#000" stroke-width="2"/>
+  
+  <!-- Eyes -->
+  <circle cx="42" cy="55" r="3" fill="#000"/>
+  <circle cx="58" cy="55" r="3" fill="#000"/>
+  
+  <!-- Nose -->
+  <circle cx="50" cy="62" r="4" fill="#FF6666" stroke="#000" stroke-width="1"/>
+  
+  <!-- Beard -->
+  <ellipse cx="50" cy="75" rx="20" ry="15" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+  <ellipse cx="35" cy="68" rx="10" ry="12" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+  <ellipse cx="65" cy="68" rx="10" ry="12" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+  
+  <!-- Mustache -->
+  <ellipse cx="40" cy="65" rx="8" ry="4" fill="#FFFFFF" stroke="#000" stroke-width="1.5"/>
+  <ellipse cx="60" cy="65" rx="8" ry="4" fill="#FFFFFF" stroke="#000" stroke-width="1.5"/>
+  
+  <!-- Smile -->
+  <path d="M 42,68 Q 50,72 58,68" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+</svg>

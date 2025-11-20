@@ -5,10 +5,11 @@ import { useState } from "react";
 interface CopyButtonProps {
   textToCopy: string | (() => Promise<string>);
   className?: string;
+  style?: React.CSSProperties;
   children?: React.ReactNode;
 }
 
-export function CopyButton({ textToCopy, className = "", children }: CopyButtonProps) {
+export function CopyButton({ textToCopy, className = "", style, children }: CopyButtonProps) {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -35,6 +36,7 @@ export function CopyButton({ textToCopy, className = "", children }: CopyButtonP
     <button
       onClick={handleCopy}
       className={`${className} relative`}
+      style={style}
     >
       <span className={`
         absolute inset-0 flex items-center justify-center gap-2

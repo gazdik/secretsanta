@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Classic email icon -->
+  <rect x="2" y="8" width="28" height="18" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+  <path d="M2 8 L16 18 L30 8" fill="none" stroke="#000" stroke-width="2"/>
+  <rect x="2" y="8" width="28" height="2" fill="#0000FF"/>
+</svg>

@@ -31,23 +31,25 @@ export function ParticipantsTextView({ participants, onChangeParticipants, onGen
   return (
     <div className="relative space-y-2">
       <textarea
-        className={`block w-full h-48 p-2 font-mono text-sm border rounded text-nowrap ${
+        className={`input-90s block w-full h-48 font-mono text-sm text-nowrap ${
           error ? 'border-red-500' : ''
         }`}
+        style={{ fontFamily: 'Courier New, monospace' }}
         value={text}
         onChange={e => handleChange(e.target.value)}
       />
 
       {error && (
-        <div className="bg-red-100 text-red-700 text-sm p-2 rounded">
-          {t('errors.line', { number: error.line })}: {t(error.key as any, error.values)}
+        <div className="sidebar-90s" style={{ background: '#FFCCCC', borderColor: '#CC0000' }}>
+          <strong>⚠️ Error on line {error.line}:</strong> {t(error.key as any, error.values)}
         </div>
       )}
 
       <button
         type="button"
         onClick={onGeneratePairs}
-        className="w-full bg-green-500 text-white p-2 rounded hover:bg-blue-600 flex items-center justify-center gap-2"
+        className="button-90s w-full flex items-center justify-center gap-2"
+        style={{ background: '#00FF00', color: '#000', fontWeight: 'bold', padding: '8px 16px' }}
       >
         <ArrowsClockwise size={20} weight="bold" />
         {t('participants.generatePairs')}

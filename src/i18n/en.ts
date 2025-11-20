@@ -39,6 +39,7 @@ export const en = {
     addPerson: "Add Person",
     generatePairs: "Generate Pairings",
     enterName: "Enter participant name",
+    enterEmail: "Enter email (optional)",
     editRules: "Edit rules",
     removeParticipant: "Remove participant",
     rulesCount_one: "{{count}} rule set",

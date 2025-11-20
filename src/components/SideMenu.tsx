@@ -31,16 +31,9 @@ export function MenuItem({icon, to, onClick, children}: {icon: React.ReactNode, 
 }
 
 export function SideMenu({children}: {children?: React.ReactNode}) {
-  const { i18n, t } = useTranslation();
-
   return (
     <div className="lg:absolute top-4 left-4 z-50 flex flex-col items-start space-y-2">
       {children}
-      {SUPPORTED_LANGUAGES.map((language) => (
-        <MenuItem key={language} icon={<Flag className={`h-3`} code={language} />} onClick={() => i18n.changeLanguage(language)}>
-          {t(`language.name`, {lng: language})}
-        </MenuItem>
-      ))}
     </div>
   );
 } 

@@ -6,6 +6,7 @@ export interface Rule {
 export interface Participant {
   id: string;
   name: string;
+  email?: string;
   hint?: string;
   rules: Rule[];
 }

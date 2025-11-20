@@ -5,10 +5,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'cherry-swash': ['Cherry Swash', 'serif'],
-        'dancing-script': ['Dancing Script', 'cursive'],
+        'cherry-swash': ['Arial', 'Helvetica', 'sans-serif'],
+        'dancing-script': ['"Comic Sans MS"', '"Comic Sans"', 'cursive'],
       },
     },
   },
 }
-

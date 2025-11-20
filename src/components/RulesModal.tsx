@@ -69,14 +69,18 @@ export function RulesModal({
       return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-xl w-full">
-        <h2 className="text-xl font-bold mb-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="content-box-90s max-w-xl w-full">
+        <div style={{ background: '#008080', color: '#FFFF00', padding: '8px 16px', fontWeight: 'bold', borderBottom: '3px solid #000', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+          {t('rules.title', { name: participant.name })}
+        </div>
+        <div style={{ padding: '16px' }}>
+        <h2 className="sr-only">
           {t('rules.title', { name: participant.name })}
         </h2>
         
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-bold mb-2">
             {t('rules.hintLabel')}
           </label>
           <input
@@ -84,14 +88,14 @@ export function RulesModal({
             value={localHint}
             onChange={(e) => setLocalHint(e.target.value)}
             placeholder={t('rules.hintPlaceholder')}
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="input-90s w-full"
           />
         </div>
         
         <div className="space-y-4 mb-6">
           {localRules.map((rule, index) => (
-            <div key={index} className="flex gap-2 items-center">
-              <span>
+            <div key={index} className="flex gap-2 items-center flex-wrap">
+              <span className="font-bold text-sm">
                 {rule.type === 'must' 
                   ? t('rules.mustBePairedWith')
                   : t('rules.mustNotBePairedWith')
@@ -100,7 +104,7 @@ export function RulesModal({
               <select
                 value={rule.targetParticipantId}
                 onChange={(e) => updateRule(index, e.target.value)}
-                className="flex-1 p-2 border rounded"
+                className="input-90s flex-1 min-w-[150px]"
               >
                 <option value="">{t('rules.selectParticipant')}</option>
                 {Object.values(participants)
@@ -112,7 +116,8 @@ export function RulesModal({
               </select>
               <button
                 onClick={() => removeRule(index)}
-                className="p-2 text-red-500 hover:text-red-700"
+                className="button-90s"
+                style={{ background: '#FF0000', color: '#FFFF00', fontWeight: 'bold' }}
                 aria-label={t('rules.removeRule')}
               >
                 <X size={20} weight="bold" />
@@ -121,14 +126,17 @@ export function RulesModal({
           ))}
         </div>
 
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-6 flex-wrap">
           <button
             onClick={() => addRule('must')}
             disabled={hasMustNotRule}
-            className={`flex-1 p-2 rounded flex items-center justify-center gap-2
-              ${hasMustNotRule 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+            className="button-90s flex-1 min-w-[150px] flex items-center justify-center gap-2"
+            style={{
+              background: hasMustNotRule ? '#999' : '#0000FF',
+              color: '#FFFF00',
+              fontWeight: 'bold',
+              cursor: hasMustNotRule ? 'not-allowed' : 'pointer'
+            }}
           >
             <Link size={20} />
             {t('rules.addMustRule')}
@@ -136,10 +144,13 @@ export function RulesModal({
           <button
             onClick={() => addRule('mustNot')}
             disabled={hasMustRule}
-            className={`flex-1 p-2 rounded flex items-center justify-center gap-2
-              ${hasMustRule 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-red-500 hover:bg-red-600'} text-white`}
+            className="button-90s flex-1 min-w-[150px] flex items-center justify-center gap-2"
+            style={{
+              background: hasMustRule ? '#999' : '#FF0000',
+              color: '#FFFF00',
+              fontWeight: 'bold',
+              cursor: hasMustRule ? 'not-allowed' : 'pointer'
+            }}
           >
             <LinkBreak size={20} />
             {t('rules.addMustNotRule')}
@@ -149,16 +160,18 @@ export function RulesModal({
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            className="button-90s"
           >
             {t('rules.cancel')}
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            className="button-90s"
+            style={{ background: '#00FF00', color: '#000', fontWeight: 'bold' }}
           >
             {t('rules.saveRules')}
           </button>
+        </div>
         </div>
       </div>
     </div>

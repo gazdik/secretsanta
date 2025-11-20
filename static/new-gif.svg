@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 31">
+  <!-- Classic "NEW!" badge -->
+  <rect width="88" height="31" fill="#FF0000" stroke="#000" stroke-width="2"/>
+  <text x="44" y="21" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#FFFF00" text-anchor="middle">NEW!</text>
+  <circle cx="10" cy="10" r="3" fill="#FFFF00">
+    <animate attributeName="opacity" values="1;0;1" dur="0.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="78" cy="10" r="3" fill="#FFFF00">
+    <animate attributeName="opacity" values="0;1;0" dur="0.5s" repeatCount="indefinite"/>
+  </circle>
+</svg>

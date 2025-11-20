@@ -1,4 +1,3 @@
-import "@fontsource/dancing-script/700.css";
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { decryptText } from '../utils/crypto';
@@ -11,6 +10,7 @@ import { motion } from 'framer-motion';
 import CryptoJS from 'crypto-js';
 import { Layout } from "../components/Layout";
 import { ReceiverData } from "../types";
+import giftIcon from '../../static/gift-90s.svg';
 
 async function loadPairing(searchParams: URLSearchParams): Promise<[string, ReceiverData]> {
   // Legacy pairings, not generated anymore; remove after 2025-01-01
@@ -77,8 +77,15 @@ export function Pairing() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-red-700 flex items-center justify-center">
-        <div className="text-xl text-white">{error}</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="content-box-90s max-w-md">
+          <div style={{ background: '#FF0000', color: '#FFFF00', padding: '8px 16px', fontWeight: 'bold', borderBottom: '3px solid #000', fontFamily: 'Arial, Helvetica, sans-serif' }}>
+            ⚠️ ERROR
+          </div>
+          <div style={{ padding: '16px' }}>
+            <div className="text-lg font-bold">{error}</div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -87,7 +94,7 @@ export function Pairing() {
 
   return (
     <Layout menuItems={menuItems}>
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center w-full">
         {!loading && assignment && (
           <>
             {!cardRevealed ? (
@@ -100,14 +107,16 @@ export function Pairing() {
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="text-8xl mb-8"
+                  className="mb-8"
+                  style={{ display: 'flex', justifyContent: 'center' }}
                 >
-                  🎁
+                  <img src={giftIcon} alt="Gift" style={{ height: '120px', width: '120px' }} />
                 </motion.div>
-                <div className="text-2xl text-gray-600 mb-4">Revealing your Secret Santa...</div>
-                <div className="w-64 h-2 bg-gray-200 rounded-full mx-auto overflow-hidden">
+                <div className="text-2xl font-bold mb-4" style={{ color: '#000', fontFamily: 'Arial, Helvetica, sans-serif' }}>Revealing your Secret Santa...</div>
+                <div className="w-64 h-4 mx-auto overflow-hidden" style={{ border: '2px inset #999', background: 'white' }}>
                   <motion.div
-                    className="h-full bg-red-600 rounded-full"
+                    className="h-full"
+                    style={{ background: '#00FF00' }}
                     initial={{ width: "0%" }}
                     animate={{ width: "100%" }}
                     transition={{ duration: 2, ease: "easeInOut" }}
@@ -122,28 +131,33 @@ export function Pairing() {
                 transition={{ ease: `easeIn`, duration: .6 }}
               >
                 <PostCard>
-                  <h1 className="text-3xl font-bold mb-6 text-center text-red-700">
+                  <h1 className="heading-90s text-3xl mb-6 text-center">
                     {t('pairing.title')}
                   </h1>
-                  <p className="mb-6 text-center text-gray-600">
+                  <div className="hr-90s" />
+                  <p className="mb-6 text-center font-bold" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
                     <Trans
                       i18nKey="pairing.assignment"
                       components={{
-                        name: <span className="font-semibold">{assignment![0]}</span>
+                        name: <span className="font-bold" style={{ color: '#0000FF' }}>{assignment![0]}</span>
                       }}
                     />
                   </p>
-                  <div className="text-8xl font-bold text-center p-6 font-dancing-script">
+                  <div className="text-6xl sm:text-8xl font-bold text-center p-6" style={{ color: '#FF0000', textShadow: '3px 3px 0 #000000', fontFamily: '"Comic Sans MS", "Comic Sans", cursive' }}>
                     {assignment[1].name}
                   </div>
                   {(instructions || assignment[1].hint) && (
-                    <div className="mt-6 flex p-4 bg-gray-50 rounded-lg leading-6 text-gray-600 whitespace-pre-wrap">
-                      <div className="mr-4">
-                        <Info size={24}/>
-                      </div>
-                      <div className="space-y-2">
-                        {assignment[1].hint && <p>{assignment[1].hint}</p>}
-                        {instructions && <p>{instructions}</p>}
+                    <div className="mt-6">
+                      <div className="sidebar-90s">
+                        <div className="flex">
+                          <div className="mr-4">
+                            <Info size={24}/>
+                          </div>
+                          <div className="space-y-2 text-sm leading-6 whitespace-pre-wrap">
+                            {assignment[1].hint && <p><strong>Hint:</strong> {assignment[1].hint}</p>}
+                            {instructions && <p>{instructions}</p>}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}

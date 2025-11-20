@@ -6,9 +6,9 @@ import { Participant } from '../types';
 describe('parseParticipantsText', () => {
   it('should parse basic participant list', () => {
     const input = `
-      Alice
-      Bob
-      Charlie
+      Alice,alice@example.com
+      Bob,bob@example.com
+      Charlie,
     `;
 
     const result = parseParticipantsText(input);
@@ -18,32 +18,38 @@ describe('parseParticipantsText', () => {
     const participants = Object.values(result.participants);
     expect(participants).toHaveLength(3);
     expect(participants.map(p => p.name)).toEqual(['Alice', 'Bob', 'Charlie']);
+    expect(participants.map(p => p.email)).toEqual(['alice@example.com', 'bob@example.com', undefined]);
     expect(participants.every(p => p.rules.length === 0)).toBe(true);
   });
 
-  it('should parse participants with hints', () => {
+  it('should preserve existing hints when provided', () => {
+    const existingParticipants: Record<string, Participant> = {
+      'Alice': {
+        id: 'alice-id',
+        name: 'Alice',
+        hint: 'likes cats',
+        rules: [],
+      },
+    };
+
     const input = `
-      Alice (likes cats)
-      Bob (allergic to chocolate)
-      Charlie
+      Alice,alice@example.com
+      Bob,bob@example.com
     `;
 
-    const result = parseParticipantsText(input);
+    const result = parseParticipantsText(input, existingParticipants);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
 
-    const participants = Object.values(result.participants);
-    expect(participants).toHaveLength(3);
-    expect(participants.find(p => p.name === 'Alice')?.hint).toBe('likes cats');
-    expect(participants.find(p => p.name === 'Bob')?.hint).toBe('allergic to chocolate');
-    expect(participants.find(p => p.name === 'Charlie')?.hint).toBeUndefined();
+    const alice = Object.values(result.participants).find(p => p.name === 'Alice');
+    expect(alice?.hint).toBe('likes cats');
   });
 
   it('should parse participants with rules', () => {
     const input = `
-      Alice =Bob !Charlie
-      Bob =Alice
-      Charlie !Alice
+      Alice,alice@example.com,=Bob !Charlie
+      Bob,bob@example.com,=Alice
+      Charlie,charlie@example.com,!Alice
     `;
 
     const result = parseParticipantsText(input);
@@ -71,11 +77,11 @@ describe('parseParticipantsText', () => {
 
   it('should handle empty lines', () => {
     const input = `
-      Alice
+      Alice,
 
-      Bob
+      Bob,
 
-      Charlie
+      Charlie,
     `;
 
     const result = parseParticipantsText(input);
@@ -88,9 +94,9 @@ describe('parseParticipantsText', () => {
 
   it('should detect duplicate names', () => {
     const input = `
-      Alice
-      Bob
-      Alice
+      Alice,
+      Bob,
+      Alice,
     `;
 
     const result = parseParticipantsText(input);
@@ -103,8 +109,8 @@ describe('parseParticipantsText', () => {
 
   it('should detect unknown participants in rules', () => {
     const input = `
-      Alice =Bob
-      Bob !David
+      Alice,alice@example.com,=Bob
+      Bob,bob@example.com,!David
     `;
 
     const result = parseParticipantsText(input);
@@ -125,8 +131,8 @@ describe('parseParticipantsText', () => {
     };
 
     const input = `
-      Alice
-      Bob
+      Alice,alice@example.com
+      Bob,bob@example.com
     `;
 
     const result = parseParticipantsText(input, existingParticipants);
@@ -144,6 +150,7 @@ describe('formatParticipantText', () => {
       'id1': {
         id: 'id1',
         name: 'Alice',
+        email: 'alice@example.com',
         hint: 'likes cats',
         rules: [
           { type: 'must', targetParticipantId: 'id2' },
@@ -153,20 +160,22 @@ describe('formatParticipantText', () => {
       'id2': {
         id: 'id2',
         name: 'Bob',
+        email: '',
         rules: []
       },
       'id3': {
         id: 'id3',
         name: 'Charlie',
+        email: '',
         rules: []
       }
     };
 
     const result = formatParticipantText(participants);
     expect(result).toBe(
-      'Alice (likes cats) =Bob !Charlie\n' +
-      'Bob\n' +
-      'Charlie\n'
+      'Alice,alice@example.com,=Bob !Charlie\n' +
+      'Bob,,\n' +
+      'Charlie,,\n'
     );
   });
 }); 
