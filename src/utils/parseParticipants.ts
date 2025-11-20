@@ -17,129 +17,141 @@ export type ParseResult = ParseSuccess | ParseError;
 
 export function formatParticipantText(participants: Record<string, Participant>): string {
   return Object.values(participants).map(participant => {
-    const mustRules = participant.rules
-      .filter(r => r.type === 'must')
-      .map(r => `=${participants[r.targetParticipantId]?.name ?? ''}`);
+    const rules = participant.rules
+      .map(rule => {
+        const targetName = participants[rule.targetParticipantId]?.name;
+        if (!targetName) {
+          return null;
+        }
 
-    const mustNotRules = participant.rules
-      .filter(r => r.type === 'mustNot')
-      .map(r => `!${participants[r.targetParticipantId]?.name ?? ''}`);
+        return `${rule.type === 'must' ? '=' : '!'}${targetName}`;
+      })
+      .filter((rule): rule is string => !!rule)
+      .join(' ');
 
-    const hintPart = participant.hint
-      ? [`(${participant.hint})`]
-      : [];
+    const columns = [
+      participant.name,
+      participant.email ?? '',
+      rules,
+    ];
 
-    return `${[participant.name, ...hintPart, ...mustRules, ...mustNotRules].join(' ')}\n`;
+    return `${columns.join(',')}\n`;
   }).join('');
 }
 
-const PAREN = /[!=(]/;
-
 export function parseParticipantsText(input: string, existingParticipants?: Record<string, Participant>): ParseResult {
-  const lines = input.split('\n').map(line => line.trim());
+  const lines = input.split('\n');
   const result: Record<string, Participant> = {};
   const nameToId: Record<string, string> = {};
+  const existingByName = existingParticipants
+    ? Object.values(existingParticipants).reduce<Record<string, Participant>>((acc, participant) => {
+        acc[participant.name] = participant;
+        return acc;
+      }, {})
+    : undefined;
 
   const parsedLines: {
     line: number,
     name: string,
-    hint?: string,
-    extra: string[],
+    email?: string,
+    ruleTokens: string[],
   }[] = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (line === '') continue;
+    const rawLine = lines[i];
+    const trimmedLine = rawLine.trim();
+    if (trimmedLine === '') continue;
 
-    let splitIndex = PAREN.exec(line)?.index;
+    const columns = rawLine.split(',').map(part => part.trim());
+    const [namePart = '', emailPart = '', ...rest] = columns;
+    const rulesPart = rest.join(',').trim();
 
-    const name = typeof splitIndex === 'number'
-      ? line.slice(0, splitIndex).trim()
-      : line.trim();
-
-    let hint: string | undefined;
-    if (typeof splitIndex === 'number' && line[splitIndex] === '(') {
-      let depth = 1;
-      let j = splitIndex + 1;
-
-      while (depth > 0 && j < line.length) {
-        if (line[j] === '(') depth++;
-        if (line[j] === ')') depth--;
-        j++;
-      }
-
-      hint = line.slice(splitIndex + 1, j - 1);
-      splitIndex = j;
-    }
-
-    const remainingPart = line.slice(splitIndex);
-    const parts = remainingPart
-      .trim()
-      .split(/([!=])/)
-      .map(part => part.trim());
-
-    if (!name) {
+    if (!namePart) {
       return { ok: false, line: i + 1, key: 'errors.emptyName' };
     }
 
-    parsedLines.push({ 
-      line: i + 1, 
-      name: name.trim(), 
-      hint: hint?.trim(),
-      extra: parts.filter(Boolean)
+    const ruleTokens = rulesPart ? rulesPart.split(/\s+/).filter(Boolean) : [];
+
+    parsedLines.push({
+      line: i + 1,
+      name: namePart,
+      email: emailPart || undefined,
+      ruleTokens,
     });
   }
 
   // First pass: create participants and build name-to-id mapping
-  for (const {line, name, hint} of parsedLines) {
+  for (const { line, name, email } of parsedLines) {
     if (nameToId[name]) {
-      return { 
-        ok: false, 
+      return {
+        ok: false,
         line,
         key: 'errors.duplicateName',
-        values: { name } 
+        values: { name }
       };
     }
 
-    const existing = existingParticipants?.[name];
+    const existing = existingByName?.[name];
     const id = existing?.id ?? crypto.randomUUID();
     nameToId[name] = id;
-    result[id] = { id, name, email: existing?.email, hint, rules: [] };
+    result[id] = {
+      id,
+      name,
+      email: email ?? existing?.email,
+      hint: existing?.hint,
+      rules: [],
+    };
   }
 
   // Second pass: process rules
-  for (const {line, name, extra} of parsedLines) {
+  for (const { line, name, ruleTokens } of parsedLines) {
     const id = nameToId[name];
     const rules: Rule[] = [];
 
-    for (let j = 0; j + 1 < extra.length; j += 2) {
-      const targetName = extra[j + 1];
+    for (const token of ruleTokens) {
+      const match = /^([=!])(.+)$/.exec(token);
+      if (!match) {
+        return {
+          ok: false,
+          line,
+          key: 'errors.invalidRuleFormat',
+          values: { rule: token },
+        };
+      }
+
+      const [, operator, targetNameRaw] = match;
+      const targetName = targetNameRaw.trim();
       if (!targetName) {
-        continue;
+        return {
+          ok: false,
+          line,
+          key: 'errors.invalidRuleFormat',
+          values: { rule: token },
+        };
       }
 
       const targetId = nameToId[targetName];
       if (!targetId) {
-        return { 
-          ok: false, 
+        return {
+          ok: false,
           line,
           key: 'errors.unknownParticipant',
-          values: { name: targetName } 
+          values: { name: targetName },
         };
       }
 
       rules.push({
-        type: extra[j] === '=' ? 'must' : 'mustNot',
-        targetParticipantId: targetId
+        type: operator === '=' ? 'must' : 'mustNot',
+        targetParticipantId: targetId,
       });
     }
 
     const validationError = checkRules(rules);
     if (validationError) {
-      return { 
-        ok: false, 
+      return {
+        ok: false,
         line,
-        key: validationError 
+        key: validationError,
       };
     }
 
@@ -147,4 +159,5 @@ export function parseParticipantsText(input: string, existingParticipants?: Reco
   }
 
   return { ok: true, participants: result };
-} 
+}
+ 
