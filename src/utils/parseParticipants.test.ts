@@ -47,7 +47,7 @@ describe('parseParticipantsText', () => {
 
   it('should parse participants with rules', () => {
     const input = `
-      Alice,alice@example.com,=Bob !Charlie
+      Alice,alice@example.com,=Bob; !Charlie
       Bob,bob@example.com,=Alice
       Charlie,charlie@example.com,!Alice
     `;
@@ -173,7 +173,7 @@ describe('formatParticipantText', () => {
 
     const result = formatParticipantText(participants);
     expect(result).toBe(
-      'Alice,alice@example.com,=Bob !Charlie\n' +
+      'Alice,alice@example.com,=Bob; !Charlie\n' +
       'Bob,,\n' +
       'Charlie,,\n'
     );

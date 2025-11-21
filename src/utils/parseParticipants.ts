@@ -27,7 +27,7 @@ export function formatParticipantText(participants: Record<string, Participant>)
         return `${rule.type === 'must' ? '=' : '!'}${targetName}`;
       })
       .filter((rule): rule is string => !!rule)
-      .join(' ');
+      .join('; ');
 
     const columns = [
       participant.name,
@@ -70,7 +70,9 @@ export function parseParticipantsText(input: string, existingParticipants?: Reco
       return { ok: false, line: i + 1, key: 'errors.emptyName' };
     }
 
-    const ruleTokens = rulesPart ? rulesPart.split(/\s+/).filter(Boolean) : [];
+    const ruleTokens = rulesPart
+      ? rulesPart.split(';').map(token => token.trim()).filter(Boolean)
+      : [];
 
     parsedLines.push({
       line: i + 1,
