@@ -11,6 +11,7 @@ import CryptoJS from 'crypto-js';
 import { Layout } from "../components/Layout";
 import { ReceiverData } from "../types";
 import giftIcon from '../../static/gift-90s.svg';
+import { recordLinkVisit } from '../services/linkTracking';
 
 async function loadPairing(searchParams: URLSearchParams): Promise<[string, ReceiverData]> {
   // Legacy pairings, not generated anymore; remove after 2025-01-01
@@ -64,6 +65,31 @@ export function Pairing() {
 
     decryptReceiver();
   }, [searchParams, t]);
+
+  useEffect(() => {
+    if (!assignment) {
+      return;
+    }
+
+    const sessionId = searchParams.get('sid');
+    const linkId = searchParams.get('lid');
+    const token = searchParams.get('token')?.trim();
+
+    if (!sessionId || !linkId || !token) {
+      return;
+    }
+
+    recordLinkVisit(token, {
+      sessionId,
+      linkId,
+      giverName: assignment[0],
+      receiverName: assignment[1].name,
+    }).then(() => {
+      console.info('Link visit recorded');
+    }).catch(err => {
+      console.error('Failed to record link visit', err);
+    });
+  }, [assignment, searchParams]);
 
   useEffect(() => {
     if (assignment && !loading && !cardRevealed) {

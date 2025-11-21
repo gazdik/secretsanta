@@ -17,9 +17,34 @@ export function generateGenerationHash(participants: Record<string, Participant>
   return JSON.stringify(Object.values(participants).map(p => ({rules: p.rules, hint: p.hint})));
 }
 
+const ID_ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789';
+const ID_LENGTH = 8;
+
+function generateId() {
+  const chars: string[] = [];
+
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(ID_LENGTH);
+    crypto.getRandomValues(bytes);
+    for (let i = 0; i < ID_LENGTH; i++) {
+      const idx = bytes[i] % ID_ALPHABET.length;
+      chars.push(ID_ALPHABET[idx]);
+    }
+    return chars.join('');
+  }
+
+  for (let i = 0; i < ID_LENGTH; i++) {
+    const idx = Math.floor(Math.random() * ID_ALPHABET.length);
+    chars.push(ID_ALPHABET[idx]);
+  }
+  return chars.join('');
+}
+
 export type GeneratedPairs = {
   hash: string;
+  sessionId: string;
   pairings: {
+    linkId: string;
     giver: {id: string; name: string};
     receiver: {id: string; name: string};
   }[];
@@ -110,6 +135,7 @@ export function generatePairs(participants: Record<string, Participant>): Genera
     }
 
     const pairings = Array.from(finalPairs).map(([giverId, receiverId]) => ({
+      linkId: generateId(),
       giver: {
         id: giverId,
         name: participants[giverId].name
@@ -122,6 +148,7 @@ export function generatePairs(participants: Record<string, Participant>): Genera
 
     return {
       hash: generateGenerationHash(participants),
+      sessionId: generateId(),
       pairings
     };
   }

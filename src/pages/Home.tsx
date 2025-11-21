@@ -17,6 +17,14 @@ import { Settings } from '../components/Settings';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { Layout } from '../components/Layout';
 
+function createLocalId() {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+
+  return Math.random().toString(36).slice(2);
+}
+
 function migrateParticipants(value: any) {
   // The first release of the new tool used an array of participants.
   if (Array.isArray(value)) {
@@ -51,30 +59,44 @@ function migrateParticipants(value: any) {
   return value;
 }
 
+function ensureAssignmentMetadata(value: any): GeneratedPairs | null {
+  if (!value) {
+    return value;
+  }
+
+  const sessionId = value.sessionId ?? createLocalId();
+  const pairings = Array.isArray(value.pairings)
+    ? value.pairings.map((pairing: any) => ({
+        linkId: pairing?.linkId ?? createLocalId(),
+        giver: pairing?.giver,
+        receiver: pairing?.receiver,
+      }))
+    : [];
+
+  return {
+    ...value,
+    sessionId,
+    pairings,
+  };
+}
+
 function migrateAssignments(value: any) {
   if (Array.isArray(value)) {
     if (value.length === 0) {
       return null;
     }
 
-    console.log({
+    return ensureAssignmentMetadata({
       hash: ``,
       pairings: value.map(([giver, receiver]) => ({
+        linkId: createLocalId(),
         giver: {id: ``, name: giver},
         receiver: {id: ``, name: receiver},
       })),
     });
-
-    return {
-      hash: ``,
-      pairings: value.map(([giver, receiver]) => ({
-        giver: {id: ``, name: giver},
-        receiver: {id: ``, name: receiver},
-      })),
-    };
   }
 
-  return value;
+  return ensureAssignmentMetadata(value);
 }
 
 export function Home() {
@@ -84,6 +106,7 @@ export function Home() {
   const [participants, setParticipants] = useLocalStorage<Record<string, Participant>>('secretSantaParticipants', {}, migrateParticipants);
   const [assignments, setAssignments] = useLocalStorage<GeneratedPairs | null>('secretSantaAssignments', null, migrateAssignments);
   const [instructions, setInstructions] = useLocalStorage<string>('secretSantaInstructions', '');
+  const [dbToken, setDbToken] = useLocalStorage<string>('secretSantaDbToken', '');
 
   const [selectedParticipantId, setSelectedParticipantId] = useState<string | null>(null);
   const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
@@ -182,6 +205,8 @@ export function Home() {
               <Settings
                 instructions={instructions}
                 onChangeInstructions={setInstructions}
+                dbToken={dbToken}
+                onChangeDbToken={setDbToken}
               />
             </Accordion>
 
@@ -195,6 +220,7 @@ export function Home() {
                   assignments={assignments}
                   instructions={instructions}
                   participants={participants}
+                  dbToken={dbToken}
                   onGeneratePairs={handleGeneratePairs}
                 />
               </Accordion>

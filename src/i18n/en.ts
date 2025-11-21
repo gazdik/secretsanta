@@ -68,12 +68,34 @@ export const en = {
     exportCSV: "Export as CSV",
     copySecretLink: "Copy Secret Link",
     linkCopied: "Added to clipboard!",
-    for: "for"
+    for: "for",
+    adminCta: "Open Tracking Dashboard",
+    adminHelp: "Opens a live view of who already visited their link. Keep this URL private."
   },
   settings: {
     title: "Settings",
     instructions: "Additional Instructions",
     instructionsPlaceholder: "e.g., budget, date, location...",
-    instructionsHelp: "They will be shown to all participants on their assignment page. Keep it short: it increases the length of the links."
+    instructionsHelp: "They will be shown to all participants on their assignment page. Keep it short: it increases the length of the links.",
+    dbTokenLabel: "LibSQL access token",
+    dbTokenPlaceholder: "Paste your Turso token here",
+    dbTokenHelp: "This token will be embedded in the participant and admin URLs so visits can be tracked."
+  },
+  admin: {
+    title: "Secret Santa Tracking",
+    missingParams: "Session id or token is missing. Open this page from the Links panel to include them automatically.",
+    sessionLabel: "Session ID",
+    refresh: "Refresh",
+    table: {
+      giver: "Giver",
+      receiver: "Receiver",
+      visits: "Visits",
+      lastVisit: "Last visit",
+      revealButton: "Reveal receiver",
+      revealHint: "Keep clicking… ({{count}}/3)",
+    },
+    neverVisited: "Never",
+    loading: "Loading data...",
+    error: "Could not load tracking data. Double-check the token and try again."
   },
 }; 
